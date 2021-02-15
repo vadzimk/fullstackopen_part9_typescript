@@ -1,7 +1,11 @@
 import express from 'express';
-import diagnoseService from './services/diagnoseService';
+import patientRouter from './routes/patients';
+import diagnosesRouter from './routes/diagnoses';
+
 const app = express();
 app.use(express.json());
+app.use('/api/patients', patientRouter);
+app.use('/api/diagnoses', diagnosesRouter)
 
 let pingCount: number = 0
 app.get('/api/ping', (_req, res) => {
@@ -10,9 +14,6 @@ app.get('/api/ping', (_req, res) => {
     res.send("pong");
 });
 
-app.get('/api/diagnoses', (_req, res)=>{
-    res.send(diagnoseService.getDiagnoses())
-})
 
 const PORT = 3001;
 app.listen(PORT, () => {
