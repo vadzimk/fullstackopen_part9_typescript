@@ -1,4 +1,5 @@
 import React from 'react';
+import Part from './Part';
 import {CoursePart} from '../types';
 
 
@@ -7,7 +8,9 @@ const Content: React.FC<{ courseParts: CoursePart[] }> = ({courseParts}) => {
         <div>
             {
                 courseParts.map(cp =>
-                    <p key={cp.name}>{cp.name} {cp.exerciseCount}</p>
+                    <div key={cp.name}>
+                        <Part cp={cp}/>
+                    </div>
                 )
             }
         </div>
