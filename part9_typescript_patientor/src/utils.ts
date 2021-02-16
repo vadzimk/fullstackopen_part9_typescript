@@ -1,4 +1,4 @@
-import {NewPatient, Gender} from './types';
+import {NewPatient, Gender, Patient, PublicPatient} from './types';
 
 export const isString = (text: any): text is string => { // type guard
     return typeof text === 'string' || text instanceof String;
@@ -14,6 +14,10 @@ const isSSN = (param: any): boolean => {
 
 const isGender = (param: any): param is Gender => {
     return Object.values(Gender).includes(param);
+}
+
+export const isPublicPatient = (param: Patient): param is PublicPatient=>{
+    return !Object.keys(param).includes('ssn');
 }
 
 const parseName = (param: any): string => {
@@ -56,7 +60,7 @@ export const toNewPatientEntry = (body: any): NewPatient => {
         dateOfBirth: parseDate(body.dateOfBirth),
         ssn: parseSSN(body.ssn),
         gender: parseGender(body.gender),
-        occupation: parseOccupation(body.occupation)
+        occupation: parseOccupation(body.occupation),
     };
 }
 

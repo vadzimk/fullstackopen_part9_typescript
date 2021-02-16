@@ -28,9 +28,8 @@ patientRouter.get('/:id',
             const patientEntry = patientService.findOneEntry(parseId(req.params.id));
             res.json({...patientEntry, entries:[]});
         } catch (e) {
-            res.send(e.message)
+            res.send(e.message);
         }
-
     })
 
 

@@ -8,6 +8,9 @@ import { useStateValue } from "./state";
 import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
+import PatientInfo from './PatientInfo';
+
+
 
 const App: React.FC = () => {
   const [, dispatch] = useStateValue();
@@ -27,6 +30,15 @@ const App: React.FC = () => {
     fetchPatientList();
   }, [dispatch]);
 
+  const parseMatch =(match: any, param:string):string =>{
+
+    if(!match || !match.params || !match.params[param] || !(typeof match.params[param] === 'string' || match.params[param] instanceof String)){
+      throw new Error(`Invalid params.${param}: ${match.params[param]}`);
+    }
+    return match.params[param];
+  }
+
+
   return (
     <div className="App">
       <Router>
@@ -37,6 +49,8 @@ const App: React.FC = () => {
           </Button>
           <Divider hidden />
           <Switch>
+            <Route path="/patients/:id"
+                   render={({match})=> match !==null ? <PatientInfo id={parseMatch(match, "id")}/> : null} />
             <Route path="/" render={() => <PatientListPage />} />
           </Switch>
         </Container>
