@@ -1,6 +1,6 @@
 import {NewPatient, Gender} from './types';
 
-const isStrig = (text: any): text is string => { // type guard
+export const isString = (text: any): text is string => { // type guard
     return typeof text === 'string' || text instanceof String;
 }
 
@@ -9,7 +9,7 @@ const isDate = (date: any): boolean => {
 }
 
 const isSSN = (param: any): boolean => {
-    return isStrig(param) && param.length < 12 && param.length>=10;
+    return isString(param) && param.length < 12 && param.length>=10;
 }
 
 const isGender = (param: any): param is Gender => {
@@ -17,7 +17,7 @@ const isGender = (param: any): param is Gender => {
 }
 
 const parseName = (param: any): string => {
-    if (!param || !isStrig(param)) {
+    if (!param || !isString(param)) {
         throw new Error(`Incorrect or missing name: ${param}`);
     }
     return param;
@@ -45,7 +45,7 @@ const parseGender = (param: any): Gender => {
 }
 
 const parseOccupation = (param: any): string => {
-    if (!param || !isStrig(param)) {
+    if (!param || !isString(param)) {
         throw new Error(`Invalid or missing occupation: ${param}`);
     }
     return param;
@@ -59,3 +59,4 @@ export const toNewPatientEntry = (body: any): NewPatient => {
         occupation: parseOccupation(body.occupation)
     };
 }
+

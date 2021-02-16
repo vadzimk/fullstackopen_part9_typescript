@@ -1,12 +1,13 @@
 import patientData from '../../data/patients.json'
-import {Patient, NonSensitivePatientEntry, NewPatient} from '../types';
+import {Patient, PublicPatient, NewPatient} from '../types';
 
 const patients: Array<Patient> = patientData as Patient[];
 
 
-const getPatientNonSensitiveData = (): Array<NonSensitivePatientEntry> =>
-    patients.map(({id, name, dateOfBirth, gender, occupation}): NonSensitivePatientEntry => ({
-           id, name, dateOfBirth, gender, occupation
+
+const getPatientNonSensitiveData = (): Array<PublicPatient> =>
+    patients.map(({id, name, dateOfBirth, gender, occupation}): PublicPatient => ({
+           id, name, dateOfBirth, gender, occupation, entries:[]
 
         })
     );
@@ -22,7 +23,17 @@ const addPatient=(entry: NewPatient): Patient=>{
 }
 
 
+const findOneEntry=(id: string): Patient =>{
+
+    const matches: Patient[] = patients.filter(p=>p.id===id);
+    if(matches.length===0){
+        throw new Error(`Not found id: ${id}`);
+    }
+    return matches[0];
+}
+
 export default {
     getPatientNonSensitiveData,
     addPatient,
+    findOneEntry
 }
