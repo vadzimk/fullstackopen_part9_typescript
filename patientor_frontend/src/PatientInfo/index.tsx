@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {Patient, isPublicPatient} from '../types';
 import axios from 'axios';
 import {apiBaseUrl} from '../constants';
-import {useStateValue} from '../state';
+import {setPatient, useStateValue} from '../state';
 import {Icon} from 'semantic-ui-react';
 
 
@@ -18,10 +18,7 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
         const fetchPatientData = async (id: string): Promise<void> => {
             try {
                 const {data: patientData} = await axios.get<Patient>(`${apiBaseUrl}/patients/${id}`);
-                dispatch({
-                    type: 'SET_PATIENT',
-                    payload: patientData
-                });
+                dispatch(setPatient(patientData));
             } catch (e) {
                 console.error(e);
             }

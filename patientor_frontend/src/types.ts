@@ -26,6 +26,7 @@ export interface Patient {
 }
 
 export type PublicPatient = Omit<Patient, 'ssn'>;
+export type NewPatient = Omit<Patient, 'id'|'entries'>;
 
 export const isPublicPatient = (param: Patient): param is PublicPatient => {
     if (!param) {

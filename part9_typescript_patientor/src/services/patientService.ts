@@ -16,9 +16,10 @@ const addPatient=(entry: NewPatient): Patient=>{
     const id = Math.ceil(Math.random()*100000000000000).toString();
     const newEntry = {
         ...entry,
-        id
+        id,
+        entries: []
     }
-    patientData.push(newEntry);
+     patients.push(newEntry);
     return newEntry;
 }
 

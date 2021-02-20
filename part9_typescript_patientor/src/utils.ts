@@ -31,7 +31,7 @@ const parseDate = (param: any): string => {
     if (!param || !isDate(param)) {
         throw new Error(`Incorrect or missing date: ${param}`);
     }
-    return param;
+    return param.toString();
 }
 
 const parseSSN = (param: any): string => {
