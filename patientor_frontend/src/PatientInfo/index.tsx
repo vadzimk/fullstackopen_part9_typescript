@@ -32,6 +32,7 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
     if (!patient) {
         return null;
     }
+
     return (
         <div>
             <h3>{patient.name}
@@ -42,6 +43,18 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
             </h3>
             <div>ssn: {"ssn" in patient && patient.ssn}</div>
             <div>occupation: {patient.occupation}</div>
+            <h3>entries</h3>
+            <div>
+                {patient.entries.map(ent =>
+                    <div key={ent.id}>
+                        <p>{ent.date} {ent.description}</p>
+                        <ul>
+                            {ent.diagnosisCodes?.map(code =>
+                                <li key={code}>{code}</li>
+                            )}
+                        </ul>
+                    </div>)}
+            </div>
         </div>
     );
 };

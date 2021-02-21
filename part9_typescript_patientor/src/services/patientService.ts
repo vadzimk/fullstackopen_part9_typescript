@@ -30,6 +30,7 @@ const findOneEntry=(id: string): Patient =>{
     if(matches.length===0){
         throw new Error(`Not found id: ${id}`);
     }
+
     return matches[0];
 }
 

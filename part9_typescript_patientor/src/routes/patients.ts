@@ -26,7 +26,8 @@ patientRouter.get('/:id',
     (req, res) => {
         try {
             const patientEntry = patientService.findOneEntry(parseId(req.params.id));
-            res.json({...patientEntry, entries:[]});
+            res.json({...patientEntry});
+            console.log("patientEntry", patientEntry)
         } catch (e) {
             res.send(e.message);
         }
