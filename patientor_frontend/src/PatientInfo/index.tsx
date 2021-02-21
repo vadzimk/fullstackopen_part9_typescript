@@ -10,6 +10,7 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
     const [state, dispatch] = useStateValue();
     const patient = state.patients[id];
 
+
     const patientAlreadyInState = (patient: Patient): boolean => {
         return !isPublicPatient(patient);
     }
@@ -50,7 +51,7 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
                         <p>{ent.date} {ent.description}</p>
                         <ul>
                             {ent.diagnosisCodes?.map(code =>
-                                <li key={code}>{code}</li>
+                                <li key={code}>{code} {state.diagnosis[code].name}</li>
                             )}
                         </ul>
                     </div>)}
