@@ -34,7 +34,7 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
     if (!patient) {
         return null;
     }
-
+    console.log("patient.entries", patient.entries)
     return (
         <div>
             <h3>{patient.name}

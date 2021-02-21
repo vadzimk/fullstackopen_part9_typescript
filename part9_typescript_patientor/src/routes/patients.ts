@@ -1,6 +1,6 @@
 import express from 'express';
 import patientService from '../services/patientService';
-import {isString, toNewPatientEntry} from '../utils';
+import {isString, toNewPatientEntry, toNewEntry} from '../utils';
 
 const patientRouter = express.Router();
 
@@ -27,11 +27,23 @@ patientRouter.get('/:id',
         try {
             const patientEntry = patientService.findOneEntry(parseId(req.params.id));
             res.json({...patientEntry});
-            console.log("patientEntry", patientEntry)
+
         } catch (e) {
             res.send(e.message);
         }
-    })
+    });
+
+patientRouter.post('/:id/entries',
+    (req, res)=>{
+        // const patientEntry = patientService.findOneEntry(parseId(req.params.id));
+        try{
+            const newEntry = toNewEntry(req.body);
+            const addedEntry = patientService.addEntry(req.params.id, newEntry);
+            res.json(addedEntry);
+        } catch (e){
+            res.send(e.message);
+        }
+    });
 
 
 export default patientRouter;

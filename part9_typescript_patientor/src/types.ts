@@ -14,7 +14,7 @@ export enum Gender {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export type Entry = HospitalEntry | OccupationalHealthCareEntry | HealthCheckEntry;
 
-interface BaseEntry{
+export interface BaseEntry{
     id: string;
     description: string;
     date: string;
@@ -37,7 +37,6 @@ interface HealthCheckEntry  extends BaseEntry{
 interface OccupationalHealthCareEntry extends BaseEntry{
     type: "OccupationalHealthcare",
     employerName: string,
-    description: string,
     sickLeave?: {
         startDate: string,
         endDate: string,
@@ -64,3 +63,13 @@ export interface Patient {
 
 export type PublicPatient = Omit<Patient, 'ssn'>;
 export type NewPatient = Omit<Patient, 'id'|'entries'>;
+// export type NewEntry = Omit<Entry, 'id'>
+
+// type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
+// export type NewEntry = DistributiveOmit<Entry, 'id'>
+
+type RemoveIdField<T>={
+    [K in keyof T as Exclude<K, 'id'>]:T[K];
+}
+
+export type NewEntry = RemoveIdField<Entry>;

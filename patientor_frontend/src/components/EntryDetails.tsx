@@ -9,6 +9,10 @@ const EntryDetails: React.FC<{entry: Entry}> = ({entry})=>{
     let entryIconName: SemanticICONS;
     const ratingColors: SemanticCOLORS[] = ['green', 'blue', 'yellow', 'red'];
 
+    function assertNever(value: never): never {
+        throw new Error(`Unhandled discriminated union member: ${JSON.stringify(value)}`)
+    }
+
     switch (entry.type){
         case 'HealthCheck':{
             entryIconName = 'doctor';
@@ -20,7 +24,10 @@ const EntryDetails: React.FC<{entry: Entry}> = ({entry})=>{
         }
         case 'OccupationalHealthcare':{
             entryIconName='stethoscope';
+            break;
         }
+        default:
+            assertNever(entry);
     }
 
     return(
