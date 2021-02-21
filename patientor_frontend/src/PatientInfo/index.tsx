@@ -4,6 +4,7 @@ import axios from 'axios';
 import {apiBaseUrl} from '../constants';
 import {setPatient, useStateValue} from '../state';
 import {Icon} from 'semantic-ui-react';
+import EntryDetails from '../components/EntryDetails';
 
 
 const PatientInfo: React.FC<{ id: string }> = ({id}) => {
@@ -47,14 +48,8 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
             <h3>entries</h3>
             <div>
                 {patient.entries.map(ent =>
-                    <div key={ent.id}>
-                        <p>{ent.date} {ent.description}</p>
-                        <ul>
-                            {ent.diagnosisCodes?.map(code =>
-                                <li key={code}>{code} {state.diagnosis[code].name}</li>
-                            )}
-                        </ul>
-                    </div>)}
+                    <EntryDetails key={ent.id} entry={ent}/>
+                        )}
             </div>
         </div>
     );
