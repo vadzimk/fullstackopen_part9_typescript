@@ -39,7 +39,7 @@ const EntryDetails: React.FC<{entry: Entry}> = ({entry})=>{
                     <li key={code}>{code} {state.diagnosis[code].name}</li>
                 )}
             </ul>
-            {entry.type=='HealthCheck' && <Icon name='heart' color={ratingColors[entry.healthCheckRating]}/>}
+            {entry.type==='HealthCheck' && <Icon name='heart' color={ratingColors[entry.healthCheckRating]}/>}
         </div>
     )
 }

@@ -14,6 +14,12 @@ export enum Gender {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export type Entry = HospitalEntry | OccupationalHealthCareEntry | HealthCheckEntry;
 
+export enum EntryType{
+    HealthCheck = 'HealthCheck',
+    OccupationalHealthcare = 'OccupationalHealthcare',
+    Hospital = 'Hospital',
+}
+
 interface BaseEntry{
     id: string;
     description: string;
@@ -71,3 +77,5 @@ export const isPublicPatient = (param: Patient): param is PublicPatient => {
     return !Object.keys(param).includes('ssn');
 }
 
+type DistributiveOmit<T, K extends keyof any> = T extends any ? Omit<T, K> : never;
+export type NewEntry = DistributiveOmit<Entry, 'id'>
