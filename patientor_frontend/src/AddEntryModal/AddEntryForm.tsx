@@ -5,6 +5,9 @@ import {useStateValue} from '../state';
 import {Diagnosis, EntryType, HealthCheckRating} from '../types';
 import {Button, Grid} from 'semantic-ui-react';
 
+const isDate = (date: any): boolean => {
+    return Boolean(Date.parse(date));
+}
 
 export type EntryFormValues = {
     date: string,
@@ -13,6 +16,11 @@ export type EntryFormValues = {
     type: EntryType,
     diagnosisCodes: Diagnosis['code'][],
     healthCheckRating: HealthCheckRating,
+    employerName: string,
+    sickLeaveStartDate: string;
+    sickLeaveEndDate: string;
+    dischargeDate: string;
+    dischargeCriteria: string;
 };
 
 interface Props {
@@ -38,14 +46,23 @@ const AddEntryForm: React.FC<Props> = ({onSubmit, onCancel}) => {
             type: EntryType.HealthCheck,
             diagnosisCodes: [],
             healthCheckRating: 0,
+            employerName: '',
+            sickLeaveStartDate: '',
+            sickLeaveEndDate: '',
+            dischargeDate: '',
+            dischargeCriteria: '',
         }}
                 onSubmit={onSubmit}
 
                 validate={(values => {
                     const requiredError = "Field is required";
+                    const invalidDateError = `Invalid date`;
                     const errors: { [field: string]: string } = {};
                     if (!values.date) {
                         errors.date = requiredError;
+                    }
+                    if(!isDate(values.date)){
+                        errors.date=invalidDateError;
                     }
                     if (!values.specialist) {
                         errors.specialist = requiredError;
@@ -56,9 +73,15 @@ const AddEntryForm: React.FC<Props> = ({onSubmit, onCancel}) => {
                     if (!values.type) {
                         errors.type = requiredError;
                     }
-                    // if(values.type===EntryType.HealthCheck && !values.healthCheckRating){
-                    //     errors.healthCheckRating = requiredError;
-                    // }
+                    if(values.type===EntryType.OccupationalHealthcare && !values.employerName){
+                        errors.employerName = requiredError;
+                    }
+                    if(values.type===EntryType.Hospital && (!values.dischargeDate || !isDate(values.dischargeDate))){
+                        errors.dischargeDate = requiredError + " or " + invalidDateError;
+                    }
+                    if(values.type===EntryType.Hospital && !values.dischargeCriteria){
+                        errors.dischargeCriteria = requiredError;
+                    }
                     return errors;
                 })}
         >
@@ -104,6 +127,46 @@ const AddEntryForm: React.FC<Props> = ({onSubmit, onCancel}) => {
                                     max={3}
                                 />
                             }
+                            {
+                                values.type === EntryType.OccupationalHealthcare
+                                && <fieldset className="form-group">
+                                    <Field
+                                        label="Employer Name"
+                                        placeholder="Employer Name"
+                                        name="employerName"
+                                        component={TextField}
+                                    />
+                                    <Field
+                                        label="Sick leave start date"
+                                        placeholder="YYYY-MM-DD"
+                                        name="sickLeaveStartDate"
+                                        component={TextField}
+                                    />
+                                    <Field
+                                        label="Sick leave end date"
+                                        placeholder="YYYY-MM-DD"
+                                        name="sickLeaveEndDate"
+                                        component={TextField}
+                                    />
+                                </fieldset>
+                            }
+                            {// gives me a waring A component is changing a controlled input of type undefined to be uncontrolled on line 156 but i initialized this field ...
+                                values.type === EntryType.Hospital
+                                && <fieldset className="form-group">
+                                    <Field
+                                        label="Discharge Date"
+                                        placeholder="YYYY-MM-DD"
+                                        name="dischargeDate"
+                                        component={TextField}
+                                    />
+                                    <Field
+                                        label="Discharge Criteria"
+                                        placeholder="Discharge Criteria"
+                                        name="dischargeCriteria"
+                                        component={TextField}
+                                    />
+                                </fieldset>
+                            }
                             <Grid>
                                 <Grid.Column floated="left" width={5}>
                                     <Button type="button" onClick={onCancel} color="red">
@@ -124,9 +187,9 @@ const AddEntryForm: React.FC<Props> = ({onSubmit, onCancel}) => {
                         </Form>
                     )
                 }
+                }
+                </Formik>
+                )
             }
-        </Formik>
-    )
-}
 
 export default AddEntryForm;

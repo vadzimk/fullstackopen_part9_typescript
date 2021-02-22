@@ -1,5 +1,5 @@
 import React from 'react';
-import {Entry} from '../types';
+import {Entry, EntryType} from '../types';
 import {Icon} from 'semantic-ui-react';
 import {SemanticCOLORS, SemanticICONS} from 'semantic-ui-react/dist/commonjs/generic';
 import {useStateValue} from '../state';
@@ -14,15 +14,15 @@ const EntryDetails: React.FC<{entry: Entry}> = ({entry})=>{
     }
 
     switch (entry.type){
-        case 'HealthCheck':{
+        case EntryType.HealthCheck:{
             entryIconName = 'doctor';
             break;
         }
-        case 'Hospital':{
+        case EntryType.Hospital:{
             entryIconName = 'hospital symbol';
             break;
         }
-        case 'OccupationalHealthcare':{
+        case EntryType.OccupationalHealthcare:{
             entryIconName='stethoscope';
             break;
         }

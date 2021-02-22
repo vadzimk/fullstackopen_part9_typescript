@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Patient, isPublicPatient, Entry} from '../types';
+import {Entry, EntryType, isPublicPatient, NewEntry, Patient} from '../types';
 import axios from 'axios';
 import {apiBaseUrl} from '../constants';
 import {addEntryToPatient, setPatient, useStateValue} from '../state';
@@ -24,11 +24,47 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
         setError(undefined);
     };
 
-    const submitNewEntry= async (values: EntryFormValues) => {
+    const submitNewEntry = async (values: EntryFormValues) => {
+        let valuesToSubmit: NewEntry;
+        switch (values.type) {
+            case EntryType.OccupationalHealthcare: {
+                const sickLeave = {
+                    startDate: values.sickLeaveStartDate,
+                    endDate: values.sickLeaveEndDate
+                };
+                delete values.sickLeaveStartDate;
+                delete values.sickLeaveEndDate;
+                valuesToSubmit = {
+                    ...values,
+                    sickLeave
+                } as NewEntry;
+                break;
+            }
+            case EntryType.HealthCheck: {
+                valuesToSubmit = values as NewEntry;
+                break;
+            }
+            case EntryType.Hospital: {
+                const discharge = {
+                    date: values.dischargeDate,
+                    criteria: values.dischargeCriteria,
+                }
+                delete values.dischargeDate;
+                delete values.dischargeCriteria;
+                valuesToSubmit = {
+                    ...values,
+                    discharge
+                } as NewEntry;
+                break
+            }
+            default:
+                throw new Error(`Invalid entry type ${values.type}`);
+        }
+
         try {
-            const { data: newEntry } = await axios.post<Entry>(
+            const {data: newEntry} = await axios.post<Entry>(
                 `${apiBaseUrl}/patients/${id}/entries`,
-                values
+                valuesToSubmit
             );
             dispatch(addEntryToPatient(id, newEntry));
             closeModal();
@@ -61,7 +97,7 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
     if (!patient) {
         return null;
     }
-    console.log("patient.entries", patient.entries)
+
     return (
         <div className="App">
             <h3>{patient.name}
@@ -76,7 +112,7 @@ const PatientInfo: React.FC<{ id: string }> = ({id}) => {
             <div>
                 {patient.entries.map(ent =>
                     <EntryDetails key={ent.id} entry={ent}/>
-                        )}
+                )}
             </div>
             <AddEntryModal
                 modalOpen={modalOpen}
